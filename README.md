@@ -16,14 +16,15 @@ SkillUP addresses this navigation crisis through a **Hybrid Intelligent Reasonin
 
 | Stage | Objective | Key IRS Techniques |
 |-------|-----------|-------------------|
-| **Stage 1 — User Profile Model** | Who is the user and what do they want? | LLM extraction, NER (spaCy), Sentence-BERT, Rule-Based Validation |
+| **Preprocessing** | Ingesting and preparing the initial data | LLM extraction, Sentence-BERT, NER (spaCy) |
+| **Stage 1 — User Profile Model** | Who is the user and what do they want? | LLM extraction, Sentence-BERT, Rule-Based Validation |
 | **Stage 2 — Skill Gap Model** | Which skills is the user missing? | Neo4j KG Traversal, Embedding Similarity, Competing Experts, Meta-Arbiter |
-| **Stage 3 — Course Recommendation** | Which courses should the user take? | CSP (OR-Tools), CBR, Fuzzy Logic, Weighted Score Fusion |
-| **RAG Explanation Engine** | Why is each course recommended? | LangChain RAG, GPT-4 Mini, Anti-hallucination safeguards |
+| **Stage 3 — Course Recommendation** | Which courses should the user take? | CSP, Fuzzy Logic, Weighted Score Fusion |
+| **RAG Explanation Engine** | Why is each course recommended? | RAG, GPT-4 Mini, Anti-hallucination safeguards |
 
 The system takes a user's uploaded CV, target career role, budget, available time, and learning preferences, cross-references them against real Singapore job market demand data scraped from MyCareersFuture (MCF), and generates a personalised, sequenced, and fully explainable course pathway using SkillsFuture-eligible programmes.
 
-Our team of 4 NUS-ISS graduate students built SkillUP as a one-month part-time academic sprint, leveraging Databricks for compute and MLflow tracking, Neo4j for knowledge graph operations, OpenAI GPT-4 Mini for natural language understanding, and Streamlit for the frontend. The system is validated with 76+ automated tests at 75%+ code coverage, 7 IRS techniques mapped across MR, RS, and CGS course modules, and 8 UAT scenarios with real mid-career switcher profiles.
+Our team of 4 NUS-ISS graduate students built SkillUP as a one-month part-time academic sprint, leveraging Databricks for compute and MLflow tracking, Neo4j for knowledge graph operations, OpenAI GPT-4 Mini for natural language understanding, and Streamlit for the frontend. The system is validated with 143+ automated tests, and 7 IRS techniques mapped across MR, RS, and CGS course modules.
 
 ---
 
@@ -49,7 +50,15 @@ Our team of 4 NUS-ISS graduate students built SkillUP as a one-month part-time a
 
 `Refer to appendix <Installation & User Guide> in project report at Github Folder: ProjectReport`
 
-### [ 1 ] To run the system locally (testing purposes only):
+### [ 1 ] To run the already deployed system:
+
+> Request user access to the Databricks workspace from a team member
+
+> Wait for team member to a) grant access and b) start the Databricks app
+
+> Access the app: https://skillup-7474646515679193.aws.databricksapps.com/
+
+### [ 2 ] To run the system locally (testing purposes only):
 
 > **Prerequisites:** Python 3.8+, Neo4j database, OpenAI API key
 
@@ -69,15 +78,17 @@ Our team of 4 NUS-ISS graduate students built SkillUP as a one-month part-time a
 
 > **Go to URL using web browser** http://localhost:8501
 
-### [ 2 ] To run the system on Databricks (full functionality):
+### [ 3 ] To run the system on Databricks (full functionality):
 
 > Deploy to Databricks workspace with Unity Catalog access
 
 > Configure environment variables: `OPENAI_API_KEY`, `NEO4J_URL`, `NEO4J_USER`, `NEO4J_PASSWORD`
 
+> Preprocessing step needs to be done manually in Databricks and on Neo4k Aura
+
 > Full data pipeline uses Delta tables, MLflow tracking, and PySpark operations
 
-### [ 3 ] To run the test suite:
+### [ 4 ] To run the test suite:
 
 > $ cd skillup
 
@@ -100,7 +111,7 @@ Our team of 4 NUS-ISS graduate students built SkillUP as a one-month part-time a
 - Project Objectives & Success Measurements
 - Project Solution — Hybrid Intelligent Reasoning Architecture (HIRA) with 3-stage pipeline
 - Project Implementation — Databricks + Neo4j + OpenAI + Streamlit
-- Project Performance & Validation — 76+ tests, 75%+ coverage, UAT with 8 scenarios
+- Project Performance & Validation — 143+ tests
 - Project Conclusions: Findings & Recommendation
 - Appendix of report: Project Proposal
 - Appendix of report: Mapped System Functionalities against knowledge, techniques and skills of modular courses: MR, RS, CGS
