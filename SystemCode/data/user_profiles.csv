@@ -1,0 +1,3 @@
+user_id,user_skills,target_roles,budget,weekly_hours,modality
+test_user_1,"[""Python"", ""SQL"", ""Machine Learning""]","[""Data Scientist""]",2000.0,8.0,online
+test_user_2,"[""Java"", ""Spring"", ""AWS""]","[""Software Engineer""]",1500.0,10.0,hybrid

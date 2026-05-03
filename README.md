@@ -1,105 +1,106 @@
-﻿### [ Practice Module ] Project Submission Template: Github Repository & Zip File
+﻿## SECTION 1 : PROJECT TITLE
+## SkillUP — AI-Powered Personalised Learning Path Coach for Singapore's Adult Upskilling Ecosystem
 
-**[ Naming Convention ]** CourseCode-StartDate-BatchCode-TeamName-ProjectName.zip
-
-* **[ MTech Thru-Train Group Project Naming Example ]** IRS-PM-2020-01-18-IS02PT-GRP-AwsomeSG-HDB_BTO_Recommender.zip
-
-* **[ MTech Stackable Group Project Naming Example ]** IRS-PM-2020-01-18-STK02-GRP-AwsomeSG-HDB_BTO_Recommender.zip
-
-[Online editor for this README.md markdown file](https://pandao.github.io/editor.md/en.html "pandao")
-
----
-
-### <<<<<<<<<<<<<<<<<<<< Start of Template >>>>>>>>>>>>>>>>>>>>
-
----
-
-## SECTION 1 : PROJECT TITLE
-## Singapore Housing & Deveoplment Board - BTO Recommender System
-
-<img src="SystemCode/clips/static/hdb-bto.png"
+<img src="ProjectReport/SkillUP.png"
      style="float: left; margin-right: 0px;" />
 
 ---
 
 ## SECTION 2 : EXECUTIVE SUMMARY / PAPER ABSTRACT
-Singapore ranks amongst countries with the highest population density in the world. In a bid to have firm control over long term urban planning, the Singapore government came up with the “Built to Order” (abbreviated BTO) initiative back in 2001. These are new Housing Development Board (HDB) flats tightly controlled by their eligibility and quantity released every year. In more recent years, the modern BTO scheme in Singapore requires a waiting period of 3-4 years, and is generally targeted at young Singaporean couples looking to purchase their first property and set up a family. Nationality and income ceilings are some of the broad filters that determine one’s eligibility for the highly sought after projects. 
 
+Singapore has one of the world's most ambitious lifelong learning programmes. The SkillsFuture movement has invested billions in adult education subsidies and provides every Singaporean aged 40 and above with a S$4,000 top-up specifically for career transition through the SkillsFuture Level-Up Programme launched in May 2024. Participation has grown steadily — 555,000 Singaporeans enrolled in SSG-supported training in 2024, up from 520,000 in 2023, representing roughly one in five of the entire workforce. SkillsFuture Credit usage surged 35% year-on-year, from 192,000 users to 260,000, the fastest growth since the programme's inception.
 
-Our team, comprising of 6 young Singaporeans, all hope to be property owners one day. Many of our peers opt for BTO flats due to their affordability, existence of financial aid from the government, as well as their resale value. However, there often exists a knowledge gap for these young couples during the decision making process and they end up making potentially regretful decisions. We would like to bridge this knowledge gap, and have hence chosen to base our project on creating a recommender system for BTO flats, utilizing the data from recent launches in Tampines, Eunos, Sengkang and Punggol. 
+Despite this momentum, a critical gap persists. Research acknowledges "information asymmetry" as a primary barrier to upskilling — people do not know which pathway is right for them. The existing MySkillsFuture portal is a directory, not an advisor. It can tell a user that a course exists; it cannot tell them whether that course is the right next step given their background, career goals, and personal constraints such as budget, schedule, and learning modality. ManpowerGroup's 2025 Talent Shortage Survey reports that 83% of Singapore employers have difficulty finding skilled talent, while another survey showed that 45% of employers plan to invest in employee upskilling in 2025. The demand is clear, but the navigation infrastructure is missing.
 
+SkillUP addresses this navigation crisis through a **Hybrid Intelligent Reasoning Architecture (HIRA)** that combines multiple AI paradigms in a three-stage pipeline:
 
-Using the techniques imparted to us in lectures, our group first set out to build a sizeable knowledge base via conducting an interview and administering a survey. While building the system, we utilized tools such as Java to scrape real time data from HDB website and transform it into a database, CLIPS to synthesize the rule based reasoning process, and Python to integrate it into an easy to use UI for the everyday user. To add icing on the cake, we even hosted the system on a website so that the everyday user can access it through the click of a link.
+| Stage | Objective | Key IRS Techniques |
+|-------|-----------|-------------------|
+| **Stage 1 — User Profile Model** | Who is the user and what do they want? | LLM extraction, NER (spaCy), Sentence-BERT, Rule-Based Validation |
+| **Stage 2 — Skill Gap Model** | Which skills is the user missing? | Neo4j KG Traversal, Embedding Similarity, Competing Experts, Meta-Arbiter |
+| **Stage 3 — Course Recommendation** | Which courses should the user take? | CSP (OR-Tools), CBR, Fuzzy Logic, Weighted Score Fusion |
+| **RAG Explanation Engine** | Why is each course recommended? | LangChain RAG, GPT-4 Mini, Anti-hallucination safeguards |
 
+The system takes a user's uploaded CV, target career role, budget, available time, and learning preferences, cross-references them against real Singapore job market demand data scraped from MyCareersFuture (MCF), and generates a personalised, sequenced, and fully explainable course pathway using SkillsFuture-eligible programmes.
 
-Our team had an amazing time working on this project, and hope to share our insights with everyone. Despite a focus on BTO flats, we would recommend it for everybody interested in understanding property market trends for residence or investment purposes. There truly are a wide array of factors behind the decision to invest in a property, and we only wish there was more time to work on the scope and scale of the project. 
+Our team of 4 NUS-ISS graduate students built SkillUP as a one-month part-time academic sprint, leveraging Databricks for compute and MLflow tracking, Neo4j for knowledge graph operations, OpenAI GPT-4 Mini for natural language understanding, and Streamlit for the frontend. The system is validated with 76+ automated tests at 75%+ code coverage, 7 IRS techniques mapped across MR, RS, and CGS course modules, and 8 UAT scenarios with real mid-career switcher profiles.
 
 ---
 
 ## SECTION 3 : CREDITS / PROJECT CONTRIBUTION
 
-| Official Full Name  | Student ID (MTech Applicable)  | Work Items (Who Did What) | Email (Optional) |
+| Official Full Name | Student ID (MTech Applicable) | Work Items (Who Did What) | Email (Optional) |
 | :------------ |:---------------:| :-----| :-----|
-| Desmond Chua | A1234567A | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| A1234567A@nus.edu.sg |
-| Chang Ye Han | A1234567B | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| A1234567B@gmail.com |
-| Chee Jia Wei | A1234567C | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| A1234567C@outlook.com |
-| Ganesh Kumar | A1234567D | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| A1234567D@yahoo.com |
-| Jeanette Lim | A1234567E | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| A1234567E@qq.com |
+| Chachanond Ruenthongchai | A0339875H | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz | |
+| Deebak Harsha S/O Sekar | A0340505R | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz | |
+| Nazeer Bin Basir | A0340533N | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz | |
+| Ouyang Yingzhao | A0021914R | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz | |
 
 ---
 
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 
-[![Sudoku AI Solver](http://img.youtube.com/vi/-AiYLUjP6o8/0.jpg)](https://youtu.be/-AiYLUjP6o8 "Sudoku AI Solver")
+[SkillUP Demo Video](https://nusu.sharepoint.com/sites/ProjectTeam_bcnss7/_layouts/15/stream.aspx?id=%2Fsites%2FProjectTeam%5Fbcnss7%2FShared%20Documents%2FGeneral%2FSkillUP%20Intro%20and%20Demo%20Video%201080p%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E764b0c97%2Dfb5f%2D45be%2Dad16%2D3f3abeb752f4)
 
-Note: It is not mandatory for every project member to appear in video presentation; Presentation by one project member is acceptable. 
-More reference video presentations [here](https://telescopeuser.wordpress.com/2018/03/31/master-of-technology-solution-know-how-video-index-2/ "video presentations")
+[SkillUP Architecture Video](https://nusu.sharepoint.com/sites/ProjectTeam_bcnss7/_layouts/15/stream.aspx?id=%2Fsites%2FProjectTeam%5Fbcnss7%2FShared%20Documents%2FGeneral%2FSkillUP%20System%20Architecture%20Video%2Ewebm)
 
 ---
-
 ## SECTION 5 : USER GUIDE
 
 `Refer to appendix <Installation & User Guide> in project report at Github Folder: ProjectReport`
 
-### [ 1 ] To run the system using iss-vm
+### [ 1 ] To run the system locally (testing purposes only):
 
-> download pre-built virtual machine from http://bit.ly/iss-vm
+> **Prerequisites:** Python 3.8+, Neo4j database, OpenAI API key
 
-> start iss-vm
+> $ git clone https://github.com/KunojiLym/skillup.git
 
-> open terminal in iss-vm
+> $ cd skillup
 
-> $ git clone https://github.com/telescopeuser/Workshop-Project-Submission-Template.git
+> $ python -m venv .venv
 
-> $ source activate iss-env-py2
+> $ source .venv/bin/activate  *(or `.venv\Scripts\activate` on Windows)*
 
-> (iss-env-py2) $ cd Workshop-Project-Submission-Template/SystemCode/clips
+> $ pip install -r requirements.txt
 
-> (iss-env-py2) $ python app.py
+> $ cp .env.example .env  *(edit .env with your API keys and credentials)*
 
-> **Go to URL using web browser** http://0.0.0.0:5000 or http://127.0.0.1:5000
+> $ streamlit run app/app.py
 
-### [ 2 ] To run the system in other/local machine:
-### Install additional necessary libraries. This application works in python 2 only.
+> **Go to URL using web browser** http://localhost:8501
 
-> $ sudo apt-get install python-clips clips build-essential libssl-dev libffi-dev python-dev python-pip
+### [ 2 ] To run the system on Databricks (full functionality):
 
-> $ pip install pyclips flask flask-socketio eventlet simplejson pandas
+> Deploy to Databricks workspace with Unity Catalog access
+
+> Configure environment variables: `OPENAI_API_KEY`, `NEO4J_URL`, `NEO4J_USER`, `NEO4J_PASSWORD`
+
+> Full data pipeline uses Delta tables, MLflow tracking, and PySpark operations
+
+### [ 3 ] To run the test suite:
+
+> $ cd skillup
+
+> $ uv run pytest tests/ -m unit  *(all unit tests)*
+
+> $ uv run pytest tests/ --cov=. --cov-report=html  *(with coverage report)*
+
+> $ ./run_tests.sh smoke  *(quick smoke tests — or `.\run_tests.ps1 smoke` on Windows)*
 
 ---
+
 ## SECTION 6 : PROJECT REPORT / PAPER
 
 `Refer to project report at Github Folder: ProjectReport`
 
 **Recommended Sections for Project Report / Paper:**
 - Executive Summary / Paper Abstract
-- Sponsor Company Introduction (if applicable)
-- Business Problem Background
-- Market Research
+- Business Problem Background — Singapore's SkillsFuture navigation gap
+- Market Research — 555K SSG enrolments, 83% employer talent shortage, 9,000+ courses
 - Project Objectives & Success Measurements
-- Project Solution (To detail domain modelling & system design.)
-- Project Implementation (To detail system development & testing approach.)
-- Project Performance & Validation (To prove project objectives are met.)
+- Project Solution — Hybrid Intelligent Reasoning Architecture (HIRA) with 3-stage pipeline
+- Project Implementation — Databricks + Neo4j + OpenAI + Streamlit
+- Project Performance & Validation — 76+ tests, 75%+ coverage, UAT with 8 scenarios
 - Project Conclusions: Findings & Recommendation
 - Appendix of report: Project Proposal
 - Appendix of report: Mapped System Functionalities against knowledge, techniques and skills of modular courses: MR, RS, CGS
@@ -109,24 +110,25 @@ More reference video presentations [here](https://telescopeuser.wordpress.com/20
 - Appendix of report: References (if applicable)
 
 ---
+
 ## SECTION 7 : MISCELLANEOUS
 
-`Refer to Github Folder: Miscellaneous`
+### Project Structure
 
-### HDB_BTO_SURVEY.xlsx
-* Results of survey
-* Insights derived, which were subsequently used in our system
+```
+skillup/
+├── app/                    # 🖥️ Streamlit frontend
+├── knowledgegraph/         # 🔗 Knowledge Graph module (Neo4j)
+├── skillgap/               # 🎯 Skill Gap Analysis module
+├── recommender/            # 📋 Course Recommendation module (CSP, CBR, Fuzzy, Neural)
+├── preprocessing/          # 🔄 Data preprocessing (Databricks notebooks)
+├── evaluation/             # 📊 Evaluation notebooks & UAT
+├── data/                   # 📊 Local data files (CSV fallbacks for test only, gold standards)
+├── tests/                  # 🧪 Comprehensive test suite (143+ tests)
+├── docs/                   # 📖 Project documentation
+├── requirements.txt        # Python dependencies
+├── app.yaml                # Databricks Apps deployment config
+└── run_tests.sh/.ps1       # Test runner scripts
+```
 
 ---
-
-### <<<<<<<<<<<<<<<<<<<< End of Template >>>>>>>>>>>>>>>>>>>>
-
----
-
-**This [Machine Reasoning (MR)](https://www.iss.nus.edu.sg/executive-education/course/detail/machine-reasoning "Machine Reasoning") course is part of the Analytics and Intelligent Systems and Graduate Certificate in [Intelligent Reasoning Systems (IRS)](https://www.iss.nus.edu.sg/stackable-certificate-programmes/intelligent-systems "Intelligent Reasoning Systems") series offered by [NUS-ISS](https://www.iss.nus.edu.sg "Institute of Systems Science, National University of Singapore").**
-
-**Lecturer: [GU Zhan (Sam)](https://www.iss.nus.edu.sg/about-us/staff/detail/201/GU%20Zhan "GU Zhan (Sam)")**
-
-[![alt text](https://www.iss.nus.edu.sg/images/default-source/About-Us/7.6.1-teaching-staff/sam-website.tmb-.png "Let's check Sam' profile page")](https://www.iss.nus.edu.sg/about-us/staff/detail/201/GU%20Zhan)
-
-**zhan.gu@nus.edu.sg**

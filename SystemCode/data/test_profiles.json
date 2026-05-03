@@ -1,0 +1,163 @@
+{
+  "uat_scenarios": [
+    {
+      "profile_id": "S1",
+      "description": "Accountant transitioning to Data Analyst",
+      "current_role": "Accountant",
+      "cv_ref": "CV002",
+      "target_role": "Data Analyst",
+      "budget_sgd": 800,
+      "weekly_hours_available": 8,
+      "modality": "online",
+      "constraints": ["online only", "budget <= $800"],
+      "validation_focus": "Technical upskilling from non-IT background"
+    },
+    {
+      "profile_id": "S2",
+      "description": "Administrative officer pivoting to Junior Developer",
+      "current_role": "Administrative Officer",
+      "cv_ref": null,
+      "target_role": "Junior Software Engineer",
+      "budget_sgd": 300,
+      "weekly_hours_available": 6,
+      "modality": "online",
+      "constraints": ["online only", "budget <= $300", "no prior coding experience"],
+      "validation_focus": "Career pivot into IT with minimal background"
+    },
+    {
+      "profile_id": "S3",
+      "description": "Software Developer deepening into ML Engineering",
+      "current_role": "Software Developer",
+      "cv_ref": "CV003",
+      "target_role": "Machine Learning Engineer",
+      "budget_sgd": 2000,
+      "weekly_hours_available": 10,
+      "modality": "flexible",
+      "constraints": ["flexible modality"],
+      "validation_focus": "Adjacent technical upskilling with strong foundation"
+    },
+    {
+      "profile_id": "S4",
+      "description": "QA Engineer moving into DevOps",
+      "current_role": "QA Engineer",
+      "cv_ref": null,
+      "target_role": "DevOps Engineer",
+      "budget_sgd": 1500,
+      "weekly_hours_available": 8,
+      "modality": "hybrid",
+      "constraints": ["hybrid or online only"],
+      "validation_focus": "Adjacent IT role transition"
+    },
+    {
+      "profile_id": "S5",
+      "description": "Fresh CS graduate entering software development",
+      "current_role": "Fresh Graduate",
+      "cv_ref": "CV009",
+      "target_role": "Junior Software Engineer",
+      "budget_sgd": 500,
+      "weekly_hours_available": 15,
+      "modality": "online",
+      "constraints": ["online only", "budget <= $500"],
+      "validation_focus": "Entry-level IT path with academic foundation"
+    },
+    {
+      "profile_id": "S6",
+      "description": "Software developer re-entering after 3-year career break",
+      "current_role": "Unemployed (former Software Developer)",
+      "cv_ref": "CV008",
+      "target_role": "Software Developer",
+      "budget_sgd": 1000,
+      "weekly_hours_available": 10,
+      "modality": "online",
+      "constraints": ["online only", "must acknowledge skill obsolescence risk"],
+      "validation_focus": "Skill refresh for re-entry after career break"
+    },
+    {
+      "profile_id": "S7",
+      "description": "Data analyst on tight budget aiming for Data Scientist",
+      "current_role": "Data Analyst",
+      "cv_ref": "CV005",
+      "target_role": "Data Scientist",
+      "budget_sgd": 350,
+      "weekly_hours_available": 6,
+      "modality": "online",
+      "constraints": ["budget <= $350", "online only"],
+      "validation_focus": "Budget-constrained path; system should suggest phased approach"
+    },
+    {
+      "profile_id": "S8",
+      "description": "Conflicting constraints: no background, senior AI target, minimal budget",
+      "current_role": "Fresh Graduate (non-CS)",
+      "cv_ref": null,
+      "target_role": "Senior AI / LLM Engineer",
+      "budget_sgd": 200,
+      "weekly_hours_available": 2,
+      "modality": "online",
+      "constraints": ["budget <= $200", "2hr/week only", "no programming background", "wants senior-level role immediately"],
+      "validation_focus": "Failure mode: system should identify contradictions and guide gracefully"
+    }
+  ],
+  "edge_cases": [
+    {
+      "profile_id": "E1",
+      "description": "Legacy COBOL developer seeking modernisation path",
+      "current_role": "COBOL Developer",
+      "cv_ref": "CV010",
+      "target_role": "Full Stack Developer",
+      "budget_sgd": 3000,
+      "weekly_hours_available": 10,
+      "modality": "flexible",
+      "constraints": [],
+      "validation_focus": "Rare/legacy skills — KG may have sparse coverage; system should still produce a path"
+    },
+    {
+      "profile_id": "E2",
+      "description": "Embedded systems developer targeting IoT Engineer",
+      "current_role": "Embedded C Developer",
+      "cv_ref": null,
+      "target_role": "IoT Engineer",
+      "budget_sgd": 2000,
+      "weekly_hours_available": 8,
+      "modality": "online",
+      "constraints": [],
+      "validation_focus": "Specialised niche — limited course coverage expected; test graceful fallback"
+    },
+    {
+      "profile_id": "E3",
+      "description": "International IT professional entering Singapore market",
+      "current_role": "Software Engineer (India)",
+      "cv_ref": null,
+      "target_role": "Software Developer",
+      "budget_sgd": 1500,
+      "weekly_hours_available": 8,
+      "modality": "online",
+      "constraints": ["SkillsFuture funding eligibility unclear (non-PR/citizen)"],
+      "validation_focus": "International credentials — KG should still match skills; funding flag expected"
+    },
+    {
+      "profile_id": "E4",
+      "description": "Freelance developer with irregular work history",
+      "current_role": "Freelance Full Stack Developer",
+      "cv_ref": null,
+      "target_role": "Senior Software Engineer",
+      "budget_sgd": 2000,
+      "weekly_hours_available": 5,
+      "modality": "online",
+      "constraints": ["no single employer for > 2 years"],
+      "validation_focus": "Fragmented CV — NER must handle project-based descriptions"
+    },
+    {
+      "profile_id": "E5",
+      "description": "Ambiguous CV with vague skill descriptions",
+      "current_role": "Unknown",
+      "cv_ref": null,
+      "target_role": "Data Analyst",
+      "budget_sgd": 1000,
+      "weekly_hours_available": 8,
+      "modality": "online",
+      "constraints": [],
+      "validation_focus": "Minimal/vague CV — system must request clarification and use reasonable defaults",
+      "notes": "CV text example: 'Worked on data projects and maintained systems. Comfortable with computers and reporting tools.'"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "evaluation_date": "2026-04-28 14:32:46",
+  "total_tests": 3,
+  "successful_pipelines": 3,
+  "metrics": {
+    "total_tests": 3,
+    "successful_pipelines": 3,
+    "pipeline_success_rate": 100.0,
+    "stage1_success_rate": 100.0,
+    "stage2_success_rate": 100.0,
+    "stage3_success_rate": 100.0,
+    "total_latency_p50": 5.236387252807617,
+    "total_latency_p95": 5.257415771484375,
+    "total_latency_p99": 5.259284973144531,
+    "stage1_latency_avg": 0.057856241861979164,
+    "stage2_latency_avg": 0.010331471761067709,
+    "stage3_latency_avg": 4.511515299479167,
+    "avg_skills_extracted": 10.0,
+    "avg_gaps_identified": 5.0,
+    "avg_courses_recommended": 0.0,
+    "avg_learning_path_cost": 0.0
+  },
+  "import_status": {
+    "stage1": "\u26a0\ufe0f  Fallback mock",
+    "stage2": "\u2705 Wrapped module",
+    "stage3": "\u2705 Real module"
+  },
+  "test_cases": [
+    {
+      "test_id": "test_001",
+      "target_role": "Data Scientist"
+    },
+    {
+      "test_id": "test_002",
+      "target_role": "Software Engineer"
+    },
+    {
+      "test_id": "test_003",
+      "target_role": "Data Scientist"
+    }
+  ]
+}

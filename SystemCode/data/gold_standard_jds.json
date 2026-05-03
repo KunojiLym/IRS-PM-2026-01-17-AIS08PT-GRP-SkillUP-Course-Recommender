@@ -1,0 +1,202 @@
+[
+  {
+    "jd_id": "JD001",
+    "title": "Junior Software Engineer",
+    "seniority": "junior",
+    "industry": "IT",
+    "required_skills": ["Python", "Git", "REST API", "Object-Oriented Programming", "SQL"],
+    "nice_to_have_skills": ["Docker", "React", "PostgreSQL"],
+    "min_experience_years": 0,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD002",
+    "title": "Senior Software Engineer",
+    "seniority": "senior",
+    "industry": "IT",
+    "required_skills": ["Java", "Spring Framework", "Microservices", "AWS", "CI/CD", "REST API"],
+    "nice_to_have_skills": ["Kubernetes", "Terraform", "PostgreSQL"],
+    "min_experience_years": 5,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD003",
+    "title": "Frontend Developer",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["JavaScript", "React", "TypeScript", "CSS", "REST API"],
+    "nice_to_have_skills": ["Node.js", "Git", "Agile Methodology"],
+    "min_experience_years": 2,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD004",
+    "title": "Full Stack Developer",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["JavaScript", "React", "Node.js", "PostgreSQL", "REST API", "Git"],
+    "nice_to_have_skills": ["Docker", "AWS", "TypeScript"],
+    "min_experience_years": 3,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD005",
+    "title": "Data Analyst",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["SQL", "Python", "Data Visualisation", "Microsoft Excel"],
+    "nice_to_have_skills": ["Power BI", "Tableau", "R Programming"],
+    "min_experience_years": 2,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD006",
+    "title": "Senior Data Analyst (BI)",
+    "seniority": "senior",
+    "industry": "IT",
+    "required_skills": ["SQL", "Power BI", "Python", "Data Visualisation", "Stakeholder Management"],
+    "nice_to_have_skills": ["Tableau", "Apache Spark", "Azure"],
+    "min_experience_years": 5,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD007",
+    "title": "Data Scientist",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["Python", "Machine Learning", "SQL", "Scikit-learn", "Data Visualisation"],
+    "nice_to_have_skills": ["Deep Learning", "TensorFlow", "Apache Spark"],
+    "min_experience_years": 2,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD008",
+    "title": "Machine Learning Engineer",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["Python", "Machine Learning", "Deep Learning", "TensorFlow", "MLOps"],
+    "nice_to_have_skills": ["PyTorch", "Kubernetes", "Apache Spark"],
+    "min_experience_years": 3,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD009",
+    "title": "DevOps Engineer",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["CI/CD", "Docker", "Kubernetes", "Linux/Unix", "AWS"],
+    "nice_to_have_skills": ["Terraform", "Ansible", "Python"],
+    "min_experience_years": 3,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD010",
+    "title": "Cloud Engineer",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["AWS", "Infrastructure as Code", "Terraform", "Linux/Unix", "CI/CD"],
+    "nice_to_have_skills": ["GCP", "Azure", "Kubernetes", "Python"],
+    "min_experience_years": 3,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD011",
+    "title": "Cybersecurity Analyst",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["Cybersecurity", "Linux/Unix", "Network Security", "SIEM", "Incident Response"],
+    "nice_to_have_skills": ["Penetration Testing", "Python", "Cloud Security"],
+    "min_experience_years": 2,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD012",
+    "title": "QA / Test Automation Engineer",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["Software Testing", "Selenium", "Python", "CI/CD", "Agile Methodology"],
+    "nice_to_have_skills": ["Unit Testing", "REST API", "Jira"],
+    "min_experience_years": 2,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD013",
+    "title": "Data Engineer",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["Python", "Apache Spark", "ETL Pipeline", "SQL", "Apache Kafka"],
+    "nice_to_have_skills": ["AWS", "Azure", "Terraform", "NoSQL"],
+    "min_experience_years": 3,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD014",
+    "title": "Database Administrator",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["SQL", "PostgreSQL", "Microsoft SQL Server", "Backup and Recovery", "Performance Tuning"],
+    "nice_to_have_skills": ["NoSQL", "MongoDB", "Cloud Databases", "Python"],
+    "min_experience_years": 3,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD015",
+    "title": "IT Project Manager",
+    "seniority": "senior",
+    "industry": "IT",
+    "required_skills": ["Project Management", "Agile Methodology", "Stakeholder Management", "Risk Management", "Jira"],
+    "nice_to_have_skills": ["PMP Certification", "Scrum Master", "Budget Management"],
+    "min_experience_years": 5,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD016",
+    "title": "IT Business Analyst",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["Requirements Gathering", "SQL", "Stakeholder Management", "Process Mapping", "Agile Methodology"],
+    "nice_to_have_skills": ["Power BI", "JIRA", "UML"],
+    "min_experience_years": 3,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD017",
+    "title": "Product Manager (Tech)",
+    "seniority": "senior",
+    "industry": "IT",
+    "required_skills": ["Product Roadmap", "Stakeholder Management", "Agile Methodology", "User Research", "Data Analysis"],
+    "nice_to_have_skills": ["SQL", "A/B Testing", "UX Design"],
+    "min_experience_years": 5,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD018",
+    "title": "Site Reliability Engineer (SRE)",
+    "seniority": "senior",
+    "industry": "IT",
+    "required_skills": ["Linux/Unix", "Python", "Kubernetes", "CI/CD", "Monitoring and Observability"],
+    "nice_to_have_skills": ["Terraform", "AWS", "Go"],
+    "min_experience_years": 5,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD019",
+    "title": "AI / LLM Engineer",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["Python", "Natural Language Processing", "Machine Learning", "Deep Learning", "MLOps"],
+    "nice_to_have_skills": ["TensorFlow", "PyTorch", "RAG", "Vector Databases"],
+    "min_experience_years": 2,
+    "source": "MyCareersFuture (synthetic)"
+  },
+  {
+    "jd_id": "JD020",
+    "title": "Network Engineer",
+    "seniority": "mid",
+    "industry": "IT",
+    "required_skills": ["Network Security", "Linux/Unix", "Routing and Switching", "Firewall Management", "TCP/IP"],
+    "nice_to_have_skills": ["Cloud Networking", "Python", "Cybersecurity"],
+    "min_experience_years": 3,
+    "source": "MyCareersFuture (synthetic)"
+  }
+]

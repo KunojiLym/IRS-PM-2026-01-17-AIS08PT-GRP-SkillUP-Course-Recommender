@@ -1,0 +1,784 @@
+"""
+evaluation/technique_validation.py
+====================================
+Week 1 scaffold for IRS technique validation.
+
+Purpose
+-------
+Validates all 7 IRS techniques used in SkillUp by running lightweight smoke tests
+against each module. In Week 1, the goal is "runs without crashing" — actual
+pass/fail scoring against success criteria happens in Weeks 2–3.
+
+Usage (on Databricks)
+---------------------
+    %run evaluation/technique_validation.py
+
+Usage (local, mock mode)
+------------------------
+    python evaluation/technique_validation.py --mock
+
+Output
+------
+    evaluation/results/baseline_YYYYMMDD.json
+
+Techniques validated
+--------------------
+1. Semantic Similarity       (Stage 1/2 — Sentence-BERT cosine similarity)
+2. Knowledge Graph Queries   (Stage 2 — Neo4j role→skill traversal)
+3. NER Precision             (Data Pipeline — spaCy entity extraction)
+4. CSP (OR-Tools)            (Stage 3 — constraint satisfaction filtering)
+5. CBR (k-NN)                (Stage 3 — case-based retrieval)
+6. Fuzzy Logic               (Stage 3 — near-miss boundary handling)
+7. Competing Experts         (Stage 2 — JD demand vs peer CV arbitration)
+8. RAG Groundedness          (RAG Engine — attribution of explanations)
+
+Databricks tables (from skillgap.py widget defaults)
+-----------------------------------------------------
+  Courses : workspace.default.my_skills_future_course_directory
+              key cols: coursereferencenumber, skills_covered, what_you_learn
+  JDs     : workspace.default.job_description
+  Peers   : workspace.default.resume_dataset_1200
+  KG out  : workspace.default.knowledge_graph_output
+  Gap log : skillsup.gap_analysis.user_analysis_log
+
+⚠️  Neo4j, Spark, and secrets are ONLY available on Databricks.
+    Local runs use --mock flag to substitute stubs.
+"""
+
+import json
+import time
+import logging
+import argparse
+from pathlib import Path
+from datetime import datetime
+from typing import Any, Dict, Optional
+
+# ---------------------------------------------------------------------------
+# Logging setup
+# ---------------------------------------------------------------------------
+LOG_DIR = Path(__file__).parent / "results"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+log_file = LOG_DIR / f"validation_{datetime.now().strftime('%Y%m%d')}.log"
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s — %(message)s",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler(log_file),
+    ],
+)
+logger = logging.getLogger("technique_validation")
+
+# ---------------------------------------------------------------------------
+# Environment detection
+# ---------------------------------------------------------------------------
+try:
+    dbutils  # noqa
+    IN_DATABRICKS = True
+    logger.info("✅ Running in Databricks environment")
+except NameError:
+    IN_DATABRICKS = False
+    logger.warning("⚠️  Running outside Databricks — mock mode may be required")
+
+# ---------------------------------------------------------------------------
+# Argument parsing (local use only; on Databricks use widget or hardcode)
+# ---------------------------------------------------------------------------
+MOCK_MODE = False
+if not IN_DATABRICKS:
+    parser = argparse.ArgumentParser(description="SkillUp Technique Validation Script")
+    parser.add_argument("--mock", action="store_true", help="Run with mock stubs (no Neo4j/Spark needed)")
+    args = parser.parse_args()
+    MOCK_MODE = args.mock
+
+# ---------------------------------------------------------------------------
+# Data paths
+# ---------------------------------------------------------------------------
+REPO_ROOT = Path(__file__).parent.parent
+DATA_DIR = REPO_ROOT / "data"
+
+SKILL_MAPPINGS_PATH = DATA_DIR / "skill_mappings_gold.json"
+GOLD_CVS_PATH = DATA_DIR / "gold_standard_cvs.json"
+GOLD_JDS_PATH = DATA_DIR / "gold_standard_jds.json"
+TEST_PROFILES_PATH = DATA_DIR / "test_profiles.json"
+
+# ---------------------------------------------------------------------------
+# Result collector
+# ---------------------------------------------------------------------------
+results: Dict[str, Any] = {
+    "snapshot_date": datetime.now().strftime("%Y-%m-%d"),
+    "environment": "databricks" if IN_DATABRICKS else "local",
+    "mock_mode": MOCK_MODE,
+    "techniques": {},
+    "latency": {
+        "e2e_seconds": None,
+        "skill_gap_seconds": None,
+        "course_recommendation_seconds": None,
+    },
+    "notes": [],
+}
+
+
+def record(technique: str, status: str, details: Dict):
+    """Record a technique result."""
+    results["techniques"][technique] = {"status": status, **details}
+    icon = "✅" if status == "runs" else "⚠️" if status == "partial" else "❌"
+    logger.info(f"{icon} [{technique}] status={status} | {details}")
+
+
+def load_json(path: Path) -> Any:
+    """Load a JSON file, returning None on failure."""
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except Exception as e:
+        logger.error(f"Failed to load {path}: {e}")
+        return None
+
+
+# ============================================================================
+# TECHNIQUE 1 — Semantic Similarity (Sentence-BERT cosine similarity)
+# ============================================================================
+def validate_semantic_similarity():
+    logger.info("=" * 60)
+    logger.info("TECHNIQUE 1: Semantic Similarity")
+    logger.info("=" * 60)
+
+    # Load 5 sample skill pairs from gold mappings
+    mappings = load_json(SKILL_MAPPINGS_PATH)
+    if not mappings:
+        record("semantic_similarity", "error", {"error": "Could not load skill_mappings_gold.json"})
+        return
+
+    sample_pairs = [(m["raw"], m["canonical"]) for m in mappings[:5]]
+    logger.info(f"Sample pairs: {sample_pairs}")
+
+    try:
+        if MOCK_MODE:
+            # Stub: return fixed scores
+            scores = [0.92, 0.88, 0.95, 0.76, 0.83]
+            logger.info("(MOCK) Cosine similarity scores: %s", scores)
+            record("semantic_similarity", "runs", {
+                "sample_scores": scores,
+                "mean_score": round(sum(scores) / len(scores), 3),
+                "note": "mock mode",
+            })
+        else:
+            from sentence_transformers import SentenceTransformer, util
+            model = SentenceTransformer("all-MiniLM-L6-v2")
+            scores = []
+            for raw, canonical in sample_pairs:
+                emb1 = model.encode(raw, convert_to_tensor=True)
+                emb2 = model.encode(canonical, convert_to_tensor=True)
+                score = float(util.cos_sim(emb1, emb2))
+                scores.append(round(score, 4))
+                logger.info(f"  '{raw}' ↔ '{canonical}': {score:.4f}")
+            record("semantic_similarity", "runs", {
+                "sample_scores": scores,
+                "mean_score": round(sum(scores) / len(scores), 3),
+                "success_threshold": 0.80,
+                "note": "Week 1: smoke test only — threshold validation in Week 3",
+            })
+    except Exception as e:
+        logger.error(f"Semantic similarity failed: {e}")
+        record("semantic_similarity", "error", {"error": str(e)})
+
+
+# ============================================================================
+# TECHNIQUE 2 — Knowledge Graph Queries (Neo4j)
+# ============================================================================
+def validate_knowledge_graph():
+    logger.info("=" * 60)
+    logger.info("TECHNIQUE 2: Knowledge Graph Queries")
+    logger.info("=" * 60)
+
+    # 5 IT role queries drawn from gold_standard_jds.json
+    it_roles = [
+        "Data Scientist",
+        "Software Engineer",
+        "Machine Learning Engineer",
+        "DevOps Engineer",
+        "Data Analyst",
+    ]
+
+    try:
+        if MOCK_MODE:
+            mock_results = {
+                role: [{"Python": 50}, {"SQL": 40}, {"Docker": 30}]
+                for role in it_roles
+            }
+            logger.info("(MOCK) KG query results: %s", list(mock_results.keys()))
+            record("knowledge_graph", "runs", {
+                "roles_queried": it_roles,
+                "roles_returning_results": len(it_roles),
+                "sample_result": mock_results["Data Scientist"],
+                "note": "mock mode — no Neo4j connection",
+            })
+        else:
+            import sys
+            sys.path.insert(0, str(REPO_ROOT))
+            from knowledgegraph.knowledgegraph import get_skills_from_job
+
+            role_results = {}
+            for role in it_roles:
+                try:
+                    skills = get_skills_from_job(role)
+                    role_results[role] = skills or []
+                    logger.info(f"  {role}: {len(role_results[role])} skills retrieved")
+                except Exception as role_err:
+                    logger.warning(f"  {role}: query failed — {role_err}")
+                    role_results[role] = None
+
+            roles_with_data = sum(1 for v in role_results.values() if v)
+            record("knowledge_graph", "runs" if roles_with_data > 0 else "partial", {
+                "roles_queried": it_roles,
+                "roles_returning_results": roles_with_data,
+                "sample_result": role_results.get("Data Scientist"),
+                "success_threshold": "≥ 85% query correctness (Week 3)",
+            })
+    except Exception as e:
+        logger.error(f"Knowledge graph validation failed: {e}")
+        record("knowledge_graph", "error", {"error": str(e)})
+
+
+# ============================================================================
+# TECHNIQUE 3 — NER Precision (spaCy entity extraction)
+# ============================================================================
+def validate_ner():
+    logger.info("=" * 60)
+    logger.info("TECHNIQUE 3: NER Precision (spaCy)")
+    logger.info("=" * 60)
+
+    # Load 3 CVs for extraction test
+    cvs = load_json(GOLD_CVS_PATH)
+    if not cvs:
+        record("ner", "error", {"error": "Could not load gold_standard_cvs.json"})
+        return
+
+    sample_cvs = cvs[:3]
+
+    try:
+        if MOCK_MODE:
+            mock_entities = {
+                "CV001": ["Python", "Windows Administration", "Jira", "IT Support"],
+                "CV002": ["SQL", "Excel", "Accounting", "Stakeholder Management"],
+                "CV003": ["Python", "Machine Learning", "REST API", "PostgreSQL"],
+            }
+            logger.info("(MOCK) NER extracted entities: %s", mock_entities)
+            record("ner", "runs", {
+                "cvs_tested": [cv["cv_id"] for cv in sample_cvs],
+                "sample_entities": mock_entities,
+                "note": "mock mode",
+            })
+        else:
+            import spacy
+
+            # ⚠️ TODO (Week 2): Use the project's custom spaCy NER model once trained.
+            # For Week 1, using baseline en_core_web_sm to verify pipeline wiring.
+            try:
+                nlp = spacy.load("en_core_web_sm")
+            except OSError:
+                logger.warning("en_core_web_sm not found — run: python -m spacy download en_core_web_sm")
+                record("ner", "error", {"error": "spaCy model not installed"})
+                return
+
+            ner_results = {}
+            for cv in sample_cvs:
+                # Read the markdown CV file for richer text
+                md_path = REPO_ROOT / cv.get("md_file", "")
+                if md_path.exists():
+                    text = md_path.read_text(encoding="utf-8")
+                else:
+                    # Fall back to skill list as text
+                    text = ", ".join(cv.get("skills", []))
+
+                doc = nlp(text)
+                entities = [(ent.text, ent.label_) for ent in doc.ents]
+                ner_results[cv["cv_id"]] = entities[:10]  # top 10
+                logger.info(f"  {cv['cv_id']}: {len(entities)} entities found")
+
+            record("ner", "runs", {
+                "cvs_tested": [cv["cv_id"] for cv in sample_cvs],
+                "sample_entities": {k: v[:3] for k, v in ner_results.items()},
+                "note": "Week 1: using en_core_web_sm baseline. Custom NER model needed in Week 2.",
+                "success_threshold": "≥ 80% precision on skill entities (Week 3, with custom model)",
+            })
+    except Exception as e:
+        logger.error(f"NER validation failed: {e}")
+        record("ner", "error", {"error": str(e)})
+
+
+# ============================================================================
+# TECHNIQUE 4 — CSP (OR-Tools constraint satisfaction)
+# ============================================================================
+def validate_csp():
+    logger.info("=" * 60)
+    logger.info("TECHNIQUE 4: CSP (OR-Tools)")
+    logger.info("=" * 60)
+
+    # Load 2 test profiles (S3, S7) — one relaxed budget, one tight
+    profiles_data = load_json(TEST_PROFILES_PATH)
+    if not profiles_data:
+        record("csp", "error", {"error": "Could not load test_profiles.json"})
+        return
+
+    uat = profiles_data.get("uat_scenarios", [])
+    sample_profiles = [p for p in uat if p["profile_id"] in ("S3", "S7")]
+
+    try:
+        if MOCK_MODE:
+            mock_results = [
+                {"profile_id": "S3", "feasible": True, "courses_selected": 3, "total_cost": 1800},
+                {"profile_id": "S7", "feasible": True, "courses_selected": 1, "total_cost": 300},
+            ]
+            logger.info("(MOCK) CSP results: %s", mock_results)
+            record("csp", "runs", {
+                "profiles_tested": ["S3", "S7"],
+                "results": mock_results,
+                "note": "mock mode",
+            })
+        else:
+            import sys
+            sys.path.insert(0, str(REPO_ROOT))
+            from recommender.recommender import SkillUpRecommender  # adjust if class name differs
+
+            csp_results = []
+            for profile in sample_profiles:
+                try:
+                    recommender = SkillUpRecommender()
+                    result = recommender.run(
+                        user_skills=["Python", "SQL"],  # simplified for smoke test
+                        target_role=profile["target_role"],
+                        budget=profile["budget_sgd"],
+                        weekly_hours=profile["weekly_hours_available"],
+                        modality=profile["modality"],
+                    )
+                    csp_results.append({
+                        "profile_id": profile["profile_id"],
+                        "feasible": result is not None,
+                        "note": "full result logged to evaluation/results/",
+                    })
+                    logger.info(f"  {profile['profile_id']}: feasible={result is not None}")
+                except Exception as pe:
+                    logger.warning(f"  {profile['profile_id']}: {pe}")
+                    csp_results.append({"profile_id": profile["profile_id"], "error": str(pe)})
+
+            record("csp", "runs", {
+                "profiles_tested": [p["profile_id"] for p in sample_profiles],
+                "results": csp_results,
+                "success_threshold": "≥ 90% constraint satisfaction on test cases (Week 3)",
+            })
+    except Exception as e:
+        logger.error(f"CSP validation failed: {e}")
+        record("csp", "error", {"error": str(e)})
+
+
+# ============================================================================
+# TECHNIQUE 5 — CBR (k-NN case-based retrieval)
+# ============================================================================
+def validate_cbr():
+    logger.info("=" * 60)
+    logger.info("TECHNIQUE 5: CBR (k-NN)")
+    logger.info("=" * 60)
+
+    # Query 2 profiles and retrieve top-3 nearest cases
+    query_profiles = [
+        {"skills": ["Python", "SQL", "Scikit-learn"], "target": "Data Scientist"},
+        {"skills": ["Java", "Spring Framework", "Docker"], "target": "DevOps Engineer"},
+    ]
+
+    try:
+        if MOCK_MODE:
+            mock_cases = [
+                {
+                    "query": query_profiles[0]["skills"],
+                    "top_cases": [
+                        {"case_id": "PEER001", "similarity": 0.91},
+                        {"case_id": "PEER002", "similarity": 0.84},
+                        {"case_id": "PEER003", "similarity": 0.79},
+                    ],
+                },
+                {
+                    "query": query_profiles[1]["skills"],
+                    "top_cases": [
+                        {"case_id": "PEER004", "similarity": 0.88},
+                        {"case_id": "PEER005", "similarity": 0.81},
+                    ],
+                },
+            ]
+            logger.info("(MOCK) CBR results: %s", mock_cases)
+            record("cbr", "runs", {
+                "profiles_tested": 2,
+                "results": mock_cases,
+                "note": "mock mode",
+            })
+        else:
+            import sys
+            sys.path.insert(0, str(REPO_ROOT))
+            # ⚠️ TODO (Week 2): Import CBR module once implemented in skillgap or recommender.
+            # For now, log a placeholder result.
+            logger.warning("CBR module not yet extracted as a standalone function.")
+            logger.warning("ACTION NEEDED: Expose CBR retrieval as `run_cbr(skills, target_role, k=3)` in recommender.py")
+            record("cbr", "partial", {
+                "profiles_tested": 0,
+                "note": (
+                    "Week 1: CBR wiring incomplete. "
+                    "Need to expose CBR retrieval function from recommender.py. "
+                    "See ACTION NEEDED comment above."
+                ),
+                "success_threshold": "τ ≥ 0.65 vs human-ranked ground truth (Week 3, n=10 cases)",
+            })
+    except Exception as e:
+        logger.error(f"CBR validation failed: {e}")
+        record("cbr", "error", {"error": str(e)})
+
+
+# ============================================================================
+# TECHNIQUE 6 — Fuzzy Logic (near-miss boundary handling)
+# ============================================================================
+def validate_fuzzy_logic():
+    logger.info("=" * 60)
+    logger.info("TECHNIQUE 6: Fuzzy Logic")
+    logger.info("=" * 60)
+
+    # 3 boundary skill pairs: user has partial proficiency
+    boundary_cases = [
+        {"skill": "Python", "user_proficiency": 0.4, "required_level": 0.6},
+        {"skill": "Machine Learning", "user_proficiency": 0.3, "required_level": 0.7},
+        {"skill": "SQL", "user_proficiency": 0.55, "required_level": 0.6},
+    ]
+
+    try:
+        if MOCK_MODE:
+            mock_scores = [
+                {"skill": "Python", "gap_weight": 0.42, "is_near_miss": True},
+                {"skill": "Machine Learning", "gap_weight": 0.65, "is_near_miss": False},
+                {"skill": "SQL", "gap_weight": 0.12, "is_near_miss": True},
+            ]
+            logger.info("(MOCK) Fuzzy results: %s", mock_scores)
+            record("fuzzy_logic", "runs", {
+                "cases_tested": 3,
+                "results": mock_scores,
+                "near_miss_detected": 2,
+                "note": "mock mode",
+            })
+        else:
+            import sys
+            sys.path.insert(0, str(REPO_ROOT))
+            from skillgap.skillgap import SkillGapAnalyzer  # adjust to actual class name
+
+            analyzer = SkillGapAnalyzer()
+            fuzzy_results = []
+            for case in boundary_cases:
+                try:
+                    gap_weight = analyzer.compute_gap_weight(
+                        skill=case["skill"],
+                        user_proficiency=case["user_proficiency"],
+                        required_level=case["required_level"],
+                    )
+                    is_near_miss = 0.0 < gap_weight <= 0.3
+                    fuzzy_results.append({
+                        "skill": case["skill"],
+                        "gap_weight": round(gap_weight, 4),
+                        "is_near_miss": is_near_miss,
+                    })
+                    logger.info(f"  {case['skill']}: gap_weight={gap_weight:.4f}, near_miss={is_near_miss}")
+                except AttributeError:
+                    logger.warning(
+                        f"  compute_gap_weight not found on SkillGapAnalyzer. "
+                        "ACTION NEEDED: Expose fuzzy gap computation as a public method."
+                    )
+                    fuzzy_results.append({"skill": case["skill"], "error": "method not exposed"})
+
+            near_miss_count = sum(1 for r in fuzzy_results if r.get("is_near_miss"))
+            record("fuzzy_logic", "runs" if fuzzy_results else "partial", {
+                "cases_tested": len(boundary_cases),
+                "results": fuzzy_results,
+                "near_miss_detected": near_miss_count,
+                "success_threshold": "≥ 75% near-miss handling (Week 3, n=10 boundary cases)",
+            })
+    except Exception as e:
+        logger.error(f"Fuzzy logic validation failed: {e}")
+        record("fuzzy_logic", "error", {"error": str(e)})
+
+
+# ============================================================================
+# TECHNIQUE 7 — Competing Experts (JD demand vs peer CV arbitration)
+# ============================================================================
+def validate_competing_experts():
+    logger.info("=" * 60)
+    logger.info("TECHNIQUE 7: Competing Experts")
+    logger.info("=" * 60)
+
+    # Run 2 IT profiles through skill gap module and print raw expert signals
+    test_inputs = [
+        {
+            "user_skills": ["Python", "SQL", "Pandas"],
+            "target_role": "Data Scientist",
+            "profile_id": "S3-simplified",
+        },
+        {
+            "user_skills": ["Java", "Docker", "Git"],
+            "target_role": "DevOps Engineer",
+            "profile_id": "S4-simplified",
+        },
+    ]
+
+    try:
+        if MOCK_MODE:
+            mock_outputs = [
+                {
+                    "profile_id": "S3-simplified",
+                    "jd_demand_signal": {"Machine Learning": 0.85, "TensorFlow": 0.72},
+                    "peer_cv_signal": {"Machine Learning": 0.88, "TensorFlow": 0.80},
+                    "arbiter_output": {"Machine Learning": 0.87, "TensorFlow": 0.76},
+                },
+                {
+                    "profile_id": "S4-simplified",
+                    "jd_demand_signal": {"Kubernetes": 0.80, "Terraform": 0.70},
+                    "peer_cv_signal": {"Kubernetes": 0.85, "Terraform": 0.65},
+                    "arbiter_output": {"Kubernetes": 0.83, "Terraform": 0.68},
+                },
+            ]
+            logger.info("(MOCK) Competing experts outputs: %s", [o["profile_id"] for o in mock_outputs])
+            record("competing_experts", "runs", {
+                "profiles_tested": 2,
+                "results": mock_outputs,
+                "note": "mock mode",
+            })
+        else:
+            import sys
+            sys.path.insert(0, str(REPO_ROOT))
+            from skillgap.skillgap import SkillGapAnalyzer
+
+            expert_results = []
+            for inp in test_inputs:
+                try:
+                    analyzer = SkillGapAnalyzer()
+                    # Run full analysis; extract raw expert signals from result
+                    result = analyzer.analyze(
+                        user_skills=inp["user_skills"],
+                        target_role=inp["target_role"],
+                    )
+                    expert_results.append({
+                        "profile_id": inp["profile_id"],
+                        "gaps_found": len(result.get("gaps", [])) if result else 0,
+                        "raw_output_keys": list(result.keys()) if result else [],
+                    })
+                    logger.info(f"  {inp['profile_id']}: gaps={len(result.get('gaps', []) if result else [])}")
+                except Exception as ie:
+                    logger.warning(f"  {inp['profile_id']}: {ie}")
+                    expert_results.append({"profile_id": inp["profile_id"], "error": str(ie)})
+
+            record("competing_experts", "runs" if expert_results else "partial", {
+                "profiles_tested": len(test_inputs),
+                "results": expert_results,
+                "success_threshold": (
+                    "≥ 70% arbiter alignment with team consensus labeling of 10 skill gaps (Week 3)"
+                ),
+                "note": (
+                    "Week 1: logging raw expert signals only. "
+                    "Consensus labeling ground truth to be created in Week 2."
+                ),
+            })
+    except Exception as e:
+        logger.error(f"Competing experts validation failed: {e}")
+        record("competing_experts", "error", {"error": str(e)})
+
+
+# ============================================================================
+# TECHNIQUE 8 — RAG Groundedness
+# ============================================================================
+def validate_rag():
+    logger.info("=" * 60)
+    logger.info("TECHNIQUE 8: RAG Groundedness")
+    logger.info("=" * 60)
+
+    # Generate 2 explanations and check retrieval source attribution
+    test_cases = [
+        {"target_role": "Data Scientist", "skills": ["Python", "SQL"]},
+        {"target_role": "DevOps Engineer", "skills": ["Docker", "Linux/Unix"]},
+    ]
+
+    try:
+        if MOCK_MODE:
+            mock_explanations = [
+                {
+                    "case": "Data Scientist",
+                    "explanation_snippet": "We recommend Machine Learning Fundamentals because...",
+                    "retrieved_sources": ["course:SF002", "kg_node:Skill:MachineLearning"],
+                    "grounded": True,
+                },
+                {
+                    "case": "DevOps Engineer",
+                    "explanation_snippet": "Based on 80% of DevOps JDs requiring Kubernetes...",
+                    "retrieved_sources": ["kg_node:Skill:Kubernetes", "jd:JD009"],
+                    "grounded": True,
+                },
+            ]
+            logger.info("(MOCK) RAG groundedness outputs: %s", [r["case"] for r in mock_explanations])
+            record("rag", "runs", {
+                "cases_tested": 2,
+                "explanations": mock_explanations,
+                "grounded_count": 2,
+                "note": "mock mode",
+            })
+        else:
+            import sys
+            sys.path.insert(0, str(REPO_ROOT))
+            from app.llm_service import LLMService  # adjust to actual class/function
+
+            rag_results = []
+            for case in test_cases:
+                try:
+                    svc = LLMService()
+                    result = svc.generate_explanation(
+                        target_role=case["target_role"],
+                        user_skills=case["skills"],
+                    )
+                    rag_results.append({
+                        "target_role": case["target_role"],
+                        "has_sources": bool(getattr(result, "sources", None)),
+                        "explanation_length": len(str(result)),
+                    })
+                    logger.info(f"  {case['target_role']}: explanation generated, sources={bool(getattr(result, 'sources', None))}")
+                except Exception as re_:
+                    logger.warning(f"  {case['target_role']}: {re_}")
+                    rag_results.append({"target_role": case["target_role"], "error": str(re_)})
+
+            record("rag", "runs" if rag_results else "partial", {
+                "cases_tested": len(test_cases),
+                "results": rag_results,
+                "success_threshold": "≥ 90% groundedness (Week 3, n=20 explanations, using rubric)",
+            })
+    except Exception as e:
+        logger.error(f"RAG validation failed: {e}")
+        record("rag", "error", {"error": str(e)})
+
+
+# ============================================================================
+# E2E Latency measurement
+# ============================================================================
+def measure_e2e_latency():
+    logger.info("=" * 60)
+    logger.info("E2E LATENCY MEASUREMENT")
+    logger.info("=" * 60)
+
+    if MOCK_MODE:
+        results["latency"] = {
+            "e2e_seconds": 12.4,
+            "skill_gap_seconds": 3.1,
+            "course_recommendation_seconds": 5.2,
+            "note": "mock mode — not real measurements",
+        }
+        logger.info("(MOCK) Latency: %s", results["latency"])
+        return
+
+    try:
+        import sys
+        sys.path.insert(0, str(REPO_ROOT))
+
+        # Use CV003 (Software Developer → ML Engineer) as the E2E test subject
+        test_profile = {
+            "user_skills": ["Python", "SQL", "REST API", "Git", "Scikit-learn"],
+            "target_role": "Machine Learning Engineer",
+            "budget": 2000,
+            "weekly_hours": 10,
+            "modality": "flexible",
+        }
+
+        e2e_start = time.time()
+
+        # Stage 2: Skill gap
+        sg_start = time.time()
+        from skillgap.skillgap import SkillGapAnalyzer
+        analyzer = SkillGapAnalyzer()
+        gap_result = analyzer.analyze(
+            user_skills=test_profile["user_skills"],
+            target_role=test_profile["target_role"],
+        )
+        sg_elapsed = time.time() - sg_start
+        logger.info(f"Stage 2 (Skill Gap): {sg_elapsed:.2f}s")
+
+        # Stage 3: Course recommendation
+        rec_start = time.time()
+        from recommender.recommender import SkillUpRecommender
+        recommender = SkillUpRecommender()
+        rec_result = recommender.run(
+            user_skills=test_profile["user_skills"],
+            target_role=test_profile["target_role"],
+            budget=test_profile["budget"],
+            weekly_hours=test_profile["weekly_hours"],
+            modality=test_profile["modality"],
+        )
+        rec_elapsed = time.time() - rec_start
+        logger.info(f"Stage 3 (Recommendation): {rec_elapsed:.2f}s")
+
+        e2e_elapsed = time.time() - e2e_start
+        logger.info(f"E2E Total: {e2e_elapsed:.2f}s")
+
+        results["latency"] = {
+            "e2e_seconds": round(e2e_elapsed, 2),
+            "skill_gap_seconds": round(sg_elapsed, 2),
+            "course_recommendation_seconds": round(rec_elapsed, 2),
+            "targets": {"e2e": 15, "skill_gap": 5, "recommendation": 7},
+            "meets_target": {
+                "e2e": e2e_elapsed < 15,
+                "skill_gap": sg_elapsed < 5,
+                "recommendation": rec_elapsed < 7,
+            },
+        }
+
+    except Exception as e:
+        logger.error(f"E2E latency measurement failed: {e}")
+        results["latency"]["error"] = str(e)
+        results["notes"].append("E2E latency could not be measured — see error above")
+
+
+# ============================================================================
+# Main
+# ============================================================================
+def main():
+    logger.info("=" * 60)
+    logger.info("SkillUp Technique Validation — Week 1 Baseline")
+    logger.info(f"Date: {results['snapshot_date']}")
+    logger.info(f"Environment: {results['environment']}")
+    logger.info(f"Mock mode: {results['mock_mode']}")
+    logger.info("=" * 60)
+
+    validate_semantic_similarity()
+    validate_knowledge_graph()
+    validate_ner()
+    validate_csp()
+    validate_cbr()
+    validate_fuzzy_logic()
+    validate_competing_experts()
+    validate_rag()
+    measure_e2e_latency()
+
+    # Save results
+    output_file = LOG_DIR / f"baseline_{datetime.now().strftime('%Y%m%d')}.json"
+    with open(output_file, "w") as f:
+        json.dump(results, f, indent=2)
+
+    logger.info("=" * 60)
+    logger.info(f"✅ Results saved to: {output_file}")
+
+    # Print summary
+    print("\n" + "=" * 60)
+    print("TECHNIQUE VALIDATION SUMMARY")
+    print("=" * 60)
+    for technique, data in results["techniques"].items():
+        status = data.get("status", "unknown")
+        icon = "✅" if status == "runs" else "⚠️" if status == "partial" else "❌"
+        print(f"  {icon} {technique:<30} {status}")
+    print()
+    latency = results["latency"]
+    print(f"  E2E latency:               {latency.get('e2e_seconds', 'N/A')}s (target <15s)")
+    print(f"  Skill gap latency:         {latency.get('skill_gap_seconds', 'N/A')}s (target <5s)")
+    print(f"  Recommendation latency:    {latency.get('course_recommendation_seconds', 'N/A')}s (target <7s)")
+    print("=" * 60)
+
+
+if __name__ == "__main__":
+    main()

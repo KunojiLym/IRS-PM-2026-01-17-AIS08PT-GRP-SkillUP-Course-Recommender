@@ -1,0 +1,8 @@
+role,skill_name,demand_count,category,prerequisites
+Data Scientist,Python,150,Technical,"[""Programming Basics""]"
+Data Scientist,Machine Learning,120,Technical,"[""Python"", ""Statistics""]"
+Data Scientist,SQL,100,Technical,"[""Database Basics""]"
+Data Scientist,Tableau,80,Technical,"[""Data Visualization""]"
+Software Engineer,Java,140,Technical,"[""OOP""]"
+Software Engineer,Spring,110,Technical,"[""Java"", ""Web Development""]"
+Software Engineer,AWS,90,Technical,"[""Cloud Computing""]"

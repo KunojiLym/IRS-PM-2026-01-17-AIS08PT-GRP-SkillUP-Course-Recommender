@@ -1,0 +1,146 @@
+{
+  "snapshot_date": "2026-05-01",
+  "environment": "databricks",
+  "mock_mode": false,
+  "techniques": {
+    "semantic_similarity": {
+      "status": "error",
+      "error": "No module named 'sentence_transformers'"
+    },
+    "knowledge_graph": {
+      "status": "error",
+      "error": "No module named 'neo4j'"
+    },
+    "ner": {
+      "status": "error",
+      "error": "No module named 'spacy'"
+    },
+    "csp": {
+      "status": "runs",
+      "profiles_tested": [
+        "S3",
+        "S7"
+      ],
+      "results": [
+        {
+          "profile_id": "S3",
+          "feasible": true,
+          "courses_returned": 3,
+          "violations_count": 0
+        },
+        {
+          "profile_id": "S7",
+          "feasible": true,
+          "courses_returned": 2,
+          "violations_count": 1
+        }
+      ],
+      "success_threshold": "\u2265 90% constraint satisfaction on test cases (Week 3)"
+    },
+    "cbr": {
+      "status": "descoped",
+      "reason": "Historical case data not generated within project timeline.",
+      "code_status": "CaseLibrary class implemented in recommender/cbr.py but not exercised.",
+      "fallback": "Recommendations use score fusion without CBR weighting (CBR weight set to 0).",
+      "note": "Documented in Limitations section of final report."
+    },
+    "fuzzy_logic": {
+      "status": "runs",
+      "cases_tested": 3,
+      "results": [
+        {
+          "skill": "Python",
+          "budget_fitness": 0.6,
+          "time_fitness": 1.0,
+          "relevance": 0.8,
+          "is_near_miss": true
+        },
+        {
+          "skill": "Machine Learning",
+          "budget_fitness": 0.7,
+          "time_fitness": 1.0,
+          "relevance": 0.8,
+          "is_near_miss": true
+        },
+        {
+          "skill": "SQL",
+          "budget_fitness": 0.45,
+          "time_fitness": 1.0,
+          "relevance": 0.8,
+          "is_near_miss": true
+        }
+      ],
+      "near_miss_detected": 3,
+      "success_threshold": "\u2265 75% near-miss handling (Week 3, n=10 boundary cases)"
+    },
+    "competing_experts": {
+      "status": "runs",
+      "profiles_tested": 2,
+      "results": [
+        {
+          "profile_id": "S3-simplified",
+          "jd_demand_signal": {
+            "Machine Learning": 0.85,
+            "TensorFlow": 0.72,
+            "Statistics": 0.68
+          },
+          "peer_cv_signal": {
+            "Machine Learning": 0.88,
+            "TensorFlow": 0.8,
+            "Statistics": 0.75
+          },
+          "arbiter_output": {
+            "TensorFlow": 0.804,
+            "Machine Learning": 0.8905,
+            "Statistics": 0.7685
+          },
+          "arbiter_formula": "0.45 * demand + 0.35 * peer + 0.20 * distance",
+          "skills_identified": 3
+        },
+        {
+          "profile_id": "S4-simplified",
+          "jd_demand_signal": {
+            "Kubernetes": 0.8,
+            "Terraform": 0.7,
+            "CI/CD": 0.75
+          },
+          "peer_cv_signal": {
+            "Kubernetes": 0.85,
+            "Terraform": 0.65,
+            "CI/CD": 0.78
+          },
+          "arbiter_output": {
+            "Terraform": 0.7425,
+            "CI/CD": 0.8105,
+            "Kubernetes": 0.8575
+          },
+          "arbiter_formula": "0.45 * demand + 0.35 * peer + 0.20 * distance",
+          "skills_identified": 3
+        }
+      ],
+      "success_threshold": "\u2265 70% arbiter alignment with team consensus labeling of 10 skill gaps (Week 3)",
+      "note": "Week 1: logging raw expert signals only. Consensus labeling ground truth to be created in Week 2."
+    },
+    "rag": {
+      "status": "partial",
+      "cases_tested": 0,
+      "note": "OpenAI API key not configured. Set OPENAI_API_KEY or Databricks secret."
+    }
+  },
+  "latency": {
+    "e2e_seconds": 0.02,
+    "skill_gap_seconds": 0.0,
+    "course_recommendation_seconds": 0.01,
+    "targets": {
+      "e2e": 15,
+      "skill_gap": 5,
+      "recommendation": 7
+    },
+    "meets_target": {
+      "e2e": true,
+      "skill_gap": true,
+      "recommendation": true
+    }
+  },
+  "notes": []
+}

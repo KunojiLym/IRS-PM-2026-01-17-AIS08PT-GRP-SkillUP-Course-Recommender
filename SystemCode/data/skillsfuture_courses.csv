@@ -1,0 +1,5 @@
+course_id,course_name,provider,skills_covered,duration_hours,cost,modality,rating,reviews
+SF001,Python Programming Basics,SSG,"[""Python""]",40,500,online,4.5,120
+SF002,Machine Learning Fundamentals,SSG,"[""Machine Learning"", ""Python""]",60,800,online,4.7,95
+SF003,SQL for Data Analysis,SSG,"[""SQL""]",30,400,online,4.3,150
+SF004,Java Enterprise Development,SSG,"[""Java"", ""Spring""]",80,1200,hybrid,4.4,85

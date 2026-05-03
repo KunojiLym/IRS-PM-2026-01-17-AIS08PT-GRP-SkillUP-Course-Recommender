@@ -1,0 +1,104 @@
+[
+  {
+    "cv_id": "CV001",
+    "level": "junior",
+    "current_role": "IT Support Analyst",
+    "years_experience": 1,
+    "skills": ["Windows Administration", "Hardware Troubleshooting", "Microsoft Excel", "Basic Python", "Jira"],
+    "education": "Diploma in Information Technology",
+    "career_break_years": 0,
+    "md_file": "data/cvs/cv001.md"
+  },
+  {
+    "cv_id": "CV002",
+    "level": "junior",
+    "current_role": "Accountant",
+    "years_experience": 3,
+    "skills": ["Microsoft Excel", "QuickBooks", "Financial Reporting", "SQL (basic)", "Stakeholder Management"],
+    "education": "BCom Accounting",
+    "career_break_years": 0,
+    "md_file": "data/cvs/cv002.md"
+  },
+  {
+    "cv_id": "CV003",
+    "level": "mid",
+    "current_role": "Software Developer",
+    "years_experience": 4,
+    "skills": ["Python", "SQL", "REST API", "Git", "Scikit-learn", "PostgreSQL"],
+    "education": "BSc Computer Science",
+    "career_break_years": 0,
+    "md_file": "data/cvs/cv003.md"
+  },
+  {
+    "cv_id": "CV004",
+    "level": "mid",
+    "current_role": "Backend Developer",
+    "years_experience": 5,
+    "skills": ["Java", "Spring Framework", "REST API", "PostgreSQL", "Git", "Docker", "Agile Methodology"],
+    "education": "BSc Information Systems",
+    "career_break_years": 0,
+    "md_file": "data/cvs/cv004.md"
+  },
+  {
+    "cv_id": "CV005",
+    "level": "mid",
+    "current_role": "Data Analyst",
+    "years_experience": 3,
+    "skills": ["SQL", "Python", "Tableau", "Microsoft Excel", "Data Visualisation", "Power BI"],
+    "education": "BSc Statistics",
+    "career_break_years": 0,
+    "md_file": "data/cvs/cv005.md"
+  },
+  {
+    "cv_id": "CV006",
+    "level": "senior",
+    "current_role": "Full Stack Developer",
+    "years_experience": 8,
+    "skills": ["JavaScript", "React", "Node.js", "PostgreSQL", "AWS", "Docker", "Agile Methodology", "REST API", "System Design"],
+    "education": "BSc Computer Science",
+    "career_break_years": 0,
+    "md_file": "data/cvs/cv006.md"
+  },
+  {
+    "cv_id": "CV007",
+    "level": "senior",
+    "current_role": "DevOps Engineer",
+    "years_experience": 6,
+    "skills": ["CI/CD", "Docker", "Kubernetes", "Linux/Unix", "AWS", "Terraform", "Python", "Ansible"],
+    "education": "BSc Computer Engineering",
+    "career_break_years": 0,
+    "md_file": "data/cvs/cv007.md"
+  },
+  {
+    "cv_id": "CV008",
+    "level": "mid",
+    "current_role": "Unemployed (former Software Developer)",
+    "years_experience": 3,
+    "skills": ["Python", "Git", "REST API", "SQL", "JavaScript"],
+    "education": "BSc Computer Science",
+    "career_break_years": 3,
+    "md_file": "data/cvs/cv008.md",
+    "notes": "3-year career break for family caregiving. Skills may be partially outdated."
+  },
+  {
+    "cv_id": "CV009",
+    "level": "junior",
+    "current_role": "Fresh Graduate",
+    "years_experience": 0,
+    "skills": ["Python", "Java", "SQL", "Git", "Object-Oriented Programming", "Data Structures"],
+    "education": "BSc Computer Science (First Class Honours)",
+    "career_break_years": 0,
+    "md_file": "data/cvs/cv009.md"
+  },
+  {
+    "cv_id": "CV010",
+    "level": "senior",
+    "current_role": "COBOL Developer",
+    "years_experience": 15,
+    "skills": ["COBOL", "Mainframe Systems", "JCL", "VSAM", "IBM DB2", "Batch Processing"],
+    "education": "Diploma in Computer Studies",
+    "career_break_years": 0,
+    "md_file": "data/cvs/cv010.md",
+    "notes": "Edge case: rare/legacy skill set seeking modernisation path."
+  }
+]

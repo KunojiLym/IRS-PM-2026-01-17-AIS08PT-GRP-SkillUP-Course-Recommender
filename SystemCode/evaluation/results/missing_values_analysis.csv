@@ -1,0 +1,13 @@
+field,missing_count,missing_pct,present_count
+difficulty,11,22.0,39
+rating,8,16.0,42
+num_reviews,8,16.0,42
+price,7,14.000000000000002,43
+skills_covered,6,12.0,44
+title,5,10.0,45
+duration_hours,4,8.0,46
+url,3,6.0,47
+course_id,0,0.0,50
+provider,0,0.0,50
+last_updated,0,0.0,50
+days_since_update,0,0.0,50

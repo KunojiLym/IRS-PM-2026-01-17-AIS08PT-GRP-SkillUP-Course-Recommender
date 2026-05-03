@@ -1,0 +1,4 @@
+test_id,target_role,stage1_success,stage1_latency_ms,stage1_role_extracted,stage1_skills_count,stage2_success,stage2_latency_ms,stage2_gap_count,stage2_candidate_courses,stage3_success,stage3_latency_ms,stage3_courses_count,stage3_total_cost,stage3_total_weeks,total_latency_ms,pipeline_success
+test_001,Data Scientist,True,0.06389617919921875,Data Scientist,10,True,0.012636184692382812,5,3,True,5.110502243041992,0,0.0,0,5.236387252807617,True
+test_002,Software Engineer,True,0.05698204040527344,Software Engineer,10,True,0.010013580322265625,5,3,True,3.2579898834228516,0,0.0,0,3.353595733642578,True
+test_003,Data Scientist,True,0.05269050598144531,Data Scientist,10,True,0.008344650268554688,5,3,True,5.166053771972656,0,0.0,0,5.25975227355957,True

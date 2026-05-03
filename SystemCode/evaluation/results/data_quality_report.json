@@ -1,0 +1,119 @@
+{
+  "evaluation_date": "2026-04-19",
+  "overall_completeness": 69.80000000000001,
+  "overall_freshness": 95.0,
+  "course_catalog": {
+    "total_courses": 50,
+    "completeness_score": 89.60000000000001,
+    "freshness_score": 90.0,
+    "avg_age_days": 27.64,
+    "stale_courses_count": 2,
+    "issues": {
+      "duplicates": [
+        "Found 5 duplicate courses"
+      ],
+      "missing_title": [
+        "5 courses (10.0%)"
+      ],
+      "missing_url": [
+        "3 courses (6.0%)"
+      ],
+      "missing_skills_covered": [
+        "6 courses (12.0%)"
+      ],
+      "invalid_urls": [
+        "3 courses with invalid URLs"
+      ],
+      "empty_skills": [
+        "6 courses (12.0%)"
+      ]
+    },
+    "missing_value_rate": 8.666666666666668,
+    "field_completeness": {
+      "course_id": 100.0,
+      "title": 90.0,
+      "provider": 100.0,
+      "url": 94.0,
+      "price": 86.0,
+      "duration_hours": 92.0,
+      "difficulty": 78.0,
+      "skills_covered": 88.0,
+      "rating": 84.0,
+      "num_reviews": 84.0,
+      "last_updated": 100.0,
+      "days_since_update": 100.0
+    }
+  },
+  "knowledge_graph": {
+    "total_nodes": 6,
+    "total_edges": 5,
+    "integrity_score": 50.0,
+    "freshness_score": 100,
+    "issues": {
+      "orphaned_nodes": [
+        "orphan_skill"
+      ],
+      "invalid_edges": [
+        "nonexistent -> python"
+      ]
+    }
+  },
+  "freshness_analysis": {
+    "catalog_avg_age_days": 27.64,
+    "catalog_max_age_days": 302.0,
+    "stale_courses_90_days": 2,
+    "very_stale_courses_180_days": 2,
+    "fresh_courses_30_days": 45,
+    "freshness_issues": {
+      "stale_courses": [
+        "2 courses not updated in 90+ days"
+      ]
+    }
+  },
+  "validation_results": [
+    {
+      "metric": "course_catalog_completeness",
+      "target": 95.0,
+      "actual": 89.60000000000001,
+      "passed": "False"
+    },
+    {
+      "metric": "knowledge_graph_integrity",
+      "target": 98.0,
+      "actual": 50.0,
+      "passed": false
+    },
+    {
+      "metric": "missing_value_rate",
+      "target": 5.0,
+      "actual": 8.666666666666668,
+      "passed": "False"
+    },
+    {
+      "metric": "course_catalog_freshness",
+      "target": 80.0,
+      "actual": 90.0,
+      "passed": true
+    },
+    {
+      "metric": "knowledge_graph_freshness",
+      "target": 80.0,
+      "actual": 100,
+      "passed": true
+    }
+  ],
+  "targets_met": "2/5",
+  "overall_pass_rate": 40.0,
+  "recommendations": [
+    "Address 6 course catalog quality issues",
+    "Fix 2 knowledge graph integrity issues",
+    "Prioritize filling missing values in critical fields",
+    "Improve course catalog completeness",
+    "Strengthen KG integrity",
+    "Update 2 stale courses (>90 days old)",
+    "Course freshness is acceptable",
+    "KG refresh schedule is adequate",
+    "Focus on maintaining data freshness",
+    "Continue current data governance practices"
+  ]
+}
